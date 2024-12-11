@@ -17,7 +17,16 @@ class MainApp extends StatelessWidget {
     return const MaterialApp(
       home: Scaffold(
         body: Center(
-          child: Text('Dumbledore`s Login Session'),
+          child: Column(
+            children: [
+              Text('Dumbledore`s Login Session'),
+              SizedBox(height: 16),
+              ElevatedButton(onPressed: null, child: Text("Einloggen")),
+              SizedBox(height: 16),
+              Text("Soll veränderbar sein per Einloggen oder Ausloggen"),
+              ElevatedButton(onPressed: null, child: Text("Ausloggen")),
+            ],
+          ),
         ),
       ),
     );
