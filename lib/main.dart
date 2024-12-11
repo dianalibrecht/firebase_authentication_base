@@ -14,18 +14,31 @@ void main() async {
 }
 
 class MainApp extends StatefulWidget {
+  // immer konstruktor z. 18, immer state (und firebase sachen)
   final authInstance = FirebaseAuth.instance;
   MainApp({super.key});
   Stream<User?> get onAuthStateChanged => authInstance.authStateChanges();
+
   @override
   State<MainApp> createState() => _MainAppState();
 }
 
 class _MainAppState extends State<MainApp> {
+  // alle Variablen, funtionen und UI
+  String? text;
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   Future<void> logoutUser() async {
     try {
       await FirebaseAuth.instance.signOut();
       print("Logged out");
+      setState(() {
+        text = null;
+      });
     } catch (e) {
       print(e);
     }
@@ -35,15 +48,11 @@ class _MainAppState extends State<MainApp> {
     try {
       final loginUser = await FirebaseAuth.instance.signInAnonymously();
       print("Signed in with anonym account.");
+      setState(() {
+        text = "User ist eingeloggt";
+      });
     } catch (e) {
       print(e);
-      // switch (e.code) {
-      //   case "operation-not-allowed":
-      //     print("Anonymous auth hasn't been enabled for this project.");
-      //     break;
-      //   default:
-      //     print(e.message);
-      // }
     }
   }
 
@@ -56,7 +65,10 @@ class _MainAppState extends State<MainApp> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Login Session'),
+              const Text(
+                'Simple Anonym Login Session',
+                style: TextStyle(color: Colors.white),
+              ),
               const SizedBox(height: 16),
               ElevatedButton(
                   onPressed: () {
@@ -64,7 +76,12 @@ class _MainAppState extends State<MainApp> {
                   },
                   child: const Text("Einloggen")),
               const SizedBox(height: 16),
-              Text("Soll veränderbar sein per Einloggen oder Ausloggen"),
+              if (text !=
+                  null) //wenn die Text variable nicht null ist, dann (unten) zeigen wir den text an.
+                Text(
+                  text!,
+                  style: TextStyle(color: Colors.green),
+                ),
               const SizedBox(height: 16),
               ElevatedButton(
                   onPressed: () {
